@@ -21,17 +21,24 @@ function Register() {
   e.preventDefault();
 
   try {
-    console.log(formData); // 👈 check this
-
     const res = await axios.post(
-      "https://newbackendfinalprj.onrender.com/api/users",
+      "https://newbackendfinalprj.onrender.com/api/users/register",
       formData
     );
 
+    console.log("SUCCESS:", res.data);
+
     alert(res.data.message);
 
+    // Save userId (if backend sends it)
+    localStorage.setItem("userId", res.data.userId);
+
+    navigate("/");
+
   } catch (error) {
-    console.log(error.response?.data);
+    console.log("FULL ERROR:", error);  // 👈 VERY IMPORTANT
+    console.log("ERROR DATA:", error.response?.data);
+
     alert(error.response?.data?.message || "Registration failed");
   }
 };

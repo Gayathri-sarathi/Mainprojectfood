@@ -25,27 +25,27 @@ function Cart({ cart, addToCart, decreaseQuantity, removeFromCart, cancelOrder }
   }
 
   try {
-    // Map cart items to send only foodId and quantity
     const orderItems = cart.map(item => ({
       foodId: item._id,
       quantity: item.quantity
     }));
 
-    console.log("Order Items sent to backend:", orderItems); // debug
+    const res = await axios.post(
+      "https://newbackendfinalprj.onrender.com/api/orders/create",
+      {
+        items: orderItems,
+        totalPrice: totalPrice + 40,
+        paymentMethod,
+        userId: localStorage.getItem("userId") || "guest123"
+      }
+    );
 
-    const res = await axios.post("https://newbackendfinalprj.onrender.com/api/orders", {
-      items: orderItems,
-      totalPrice: totalPrice + 40, // include delivery fee
-      paymentMethod,
-      userId: localStorage.getItem("userId") || null,
-    });
-
-    alert(res.data.message); // success
-    cancelOrder(); // clear cart
+    alert(res.data.message);
+    cancelOrder();
 
   } catch (error) {
     console.error("Order placement error:", error.response?.data || error.message);
-    alert("Failed to place order. Try again!");
+    alert(error.response?.data?.message || "Failed to place order");
   }
 };
 

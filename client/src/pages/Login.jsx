@@ -39,7 +39,7 @@ function Login() {
 
   try {
     const response = await axios.post(
-      "https://newbackendfinalprj.onrender.com/api/users",
+      "https://newbackendfinalprj.onrender.com/api/users/login",
       { email, password }
     );
 
